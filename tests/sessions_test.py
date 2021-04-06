@@ -5,7 +5,7 @@ from clientapi.auth import AuthBearer
 
 
 # Scenarios for sessions
-# Scenario 01: plain
+# Scenario 01: no_auth
 # Scenario 02: bearer
 def test_sessions_no_auth():
     # When
