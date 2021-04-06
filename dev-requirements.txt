@@ -1,0 +1,8 @@
+-r requirements.txt
+isort==5.7.0
+pre-commit==2.11.1
+pylint==2.7.2
+pytest==6.2.2
+pytest-cov==2.10.0
+setuptools==42.0.2
+yapf==0.30.0

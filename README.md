@@ -1,6 +1,7 @@
 # clientapi
 
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://img.shields.io/badge/version-0.1.0-blue)
+[![CircleCI](https://circleci.com/gh/ElectricAI/clientapi.svg?style=svg&circle-token=116bb1eeb17c6c4313e6789f3602159fe3f01b39)](https://circleci.com/gh/ElectricAI/clientapi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/maintainability)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/test_coverage)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/test_coverage)
 [![Team](https://img.shields.io/badge/team-ite-orange)](https://img.shields.io/badge/team-ite-orange)
