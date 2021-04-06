@@ -14,7 +14,7 @@ class AuthBearer(AuthBase):  # pylint: disable=too-few-public-methods
     def __init__(self, token):
         self.token = token
         if not token:
-            raise InvalidTokenError("No token set to query API-devices")
+            raise InvalidTokenError("No token set to query the API")
 
     def __call__(self, r):
         r.headers["Authorization"] = f"Bearer {self.token}"
