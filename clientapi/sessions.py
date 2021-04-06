@@ -6,10 +6,11 @@ from clientapi.auth import AuthBearer
 
 
 @contextmanager
-def plain():
+def no_auth():
     """
     Creates a HTTP session with the default configuration
-    :returns: Session
+    Returns:
+        Session
     """
     session = Session()
     yield session
@@ -17,12 +18,17 @@ def plain():
 
 
 @contextmanager
-def bearer(auth_token):
+def bearer_auth(bearer_token):
     """
     Creates a HTTP session with a bearer token
-    :returns: Session
+
+    Args:
+        bearer_token: token to use in the request
+
+    Returns:
+        Session
     """
     session = Session()
-    session.auth = AuthBearer(auth_token)
+    session.auth = AuthBearer(bearer_token)
     yield session
     session.close()
