@@ -9,6 +9,15 @@ class ContentType(str, Enum):
     JSON = "application/json"
 
 
+def _create_headers(headers, data, content_type):
+    headers = headers or {}
+
+    if data and content_type:
+        headers.update({"Content-Type": content_type})
+
+    return headers
+
+
 class ClientAPI:  # pylint: disable=too-few-public-methods
     """Base class to define thin clients to Electric owned APIs.
     """
@@ -22,15 +31,6 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
         """
         self._session = session
         self._url = url
-
-    @staticmethod
-    def _create_headers(headers, data, content_type):
-        headers = headers or {}
-
-        if data and content_type:
-            headers.update({"Content-Type": content_type})
-
-        return headers
 
     def execute_request(
         self,
@@ -63,7 +63,7 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
                 url=url,
                 method=method,
                 params=params,
-                headers=self._create_headers(headers, data, content_type),
+                headers=_create_headers(headers, data, content_type),
                 data=data,
             )
             response.raise_for_status()
