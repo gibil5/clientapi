@@ -1,6 +1,6 @@
 import pytest
 
-from clientapi.auth import AuthBearer, InvalidTokenError
+from clientapi.auth import AuthBearer, BearerTokenNotValid
 
 
 # Auth Scenarios
@@ -18,7 +18,7 @@ def test_bearer_token_creation_success(auth_token):
 
 def test_missing_token():
     # Given / When
-    with pytest.raises(InvalidTokenError):
+    with pytest.raises(BearerTokenNotValid):
         _ = AuthBearer(token=None)
 
 
