@@ -4,7 +4,7 @@ from typing import Any
 from pydantic import ValidationError
 from requests import HTTPError
 
-from clientapi.responses import ElectricAPIErrorResponse
+from clientapi.responses import JsonAPIErrorResponse
 
 
 class APIClientError(Exception):
@@ -66,7 +66,7 @@ class APIHTTPError(APIClientError):
     def wrap(cls, http_error: HTTPError):
 
         try:
-            error = ElectricAPIErrorResponse.parse_raw(http_error.response.content)
+            error = JsonAPIErrorResponse.parse_raw(http_error.response.content)
             code = error.code
             detail = error.detail
             source = error.source
