@@ -6,16 +6,16 @@ from pydantic import BaseModel
 
 class JsonAPIErrorResponse(BaseModel):
     """
-    Schema to model a JsonAPI styled response
+    Schema to model a JsonAPI error response
 
-    It only models a subset of the recommended attributes. Also, is good to consider
+    It only models a subset of the recommended attributes. Also, have in mind
     that this schema is used as a top level one, not wrapped up in `errors` as the spec
     recommends.
 
         "Error objects MUST be returned as an array keyed by errors in the top level of a JSON:API document"
 
     Future version of this library will try to include that, but so far in this current version
-    there is no need to support that.
+    there is no need to support it.
 
     Docs:
     https://jsonapi.org/format/#error-objects
@@ -25,23 +25,47 @@ class JsonAPIErrorResponse(BaseModel):
     source: Optional[Any]
 
 
-class ElectricAPIResponse(BaseModel):
+class JsonAPIResponse(BaseModel):
+    """
+    Schema to model a JsonAPI styled primary data response
+
+    Docs:
+    https://jsonapi.org/format/#document-top-level
+    """
     data: Any
 
 
-def entity(model: Type[BaseModel]) -> Type[ElectricAPIResponse]:
+def entity(model: Type[BaseModel]) -> Type[JsonAPIResponse]:
+    """
+    Wraps a model in the JsonAPIResponse format for an entity
+    Args:
+        model: pydantic model to wrap
+
+    Returns:
+        JsonAPIResponse
+
+    """
     attrs = {"data": (model, None)}
     return pydantic.create_model(
-        "ElectricAPIEntityResponse",
-        __base__=ElectricAPIResponse,
+        "JsonAPIEntityResponse",
+        __base__=JsonAPIResponse,
         **attrs,
     )
 
 
-def collection(model: Type[BaseModel]) -> Type[ElectricAPIResponse]:
+def collection(model: Type[BaseModel]) -> Type[JsonAPIResponse]:
+    """
+    Wraps a model in the JsonAPIResponse format for a collection
+    Args:
+        model: pydantic model to wrap
+
+    Returns:
+        JsonAPIResponse
+
+    """
     attrs = {"data": (List[model], None)}
     return pydantic.create_model(
-        "ElectricAPICollectionResponse",
-        __base__=ElectricAPIResponse,
+        "JsonAPICollectionResponse",
+        __base__=JsonAPIResponse,
         **attrs,
     )
