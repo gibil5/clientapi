@@ -8,7 +8,7 @@ from clientapi.auth import (
 )
 
 
-# Auth0Bearer Scenarios
+# Bearer Scenarios
 # Scenario 01: Creation Success
 # Scenario 02: Missing Token
 def test_bearer_token_creation_success(auth_token):
@@ -48,7 +48,7 @@ def test_shared_secret_missing_key():
 
 @pytest.fixture(name="auth_token")
 def get_auth_token():
-    return "aRandomBearerTokenForAuth0Authentication"
+    return "aRandomBearerTokenForAuthentication"
 
 
 @pytest.fixture(name="shared_secret_key")
