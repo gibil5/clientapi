@@ -2,9 +2,9 @@ import pytest
 
 from clientapi.auth import (
     Bearer,
-    BearerTokenNotValid,
+    InvalidBearerToken,
+    InvalidSharedSecretKey,
     SharedSecret,
-    SharedSecretKeyNotValid,
 )
 
 
@@ -23,7 +23,7 @@ def test_bearer_token_creation_success(auth_token):
 
 def test_missing_token():
     # Given / When
-    with pytest.raises(BearerTokenNotValid):
+    with pytest.raises(InvalidBearerToken):
         _ = Bearer(token=None)
 
 
@@ -42,7 +42,7 @@ def test_shared_secret_creation_success(shared_secret_key):
 
 def test_shared_secret_missing_key():
     # Given / When
-    with pytest.raises(SharedSecretKeyNotValid):
+    with pytest.raises(InvalidSharedSecretKey):
         _ = SharedSecret(key=None)
 
 
