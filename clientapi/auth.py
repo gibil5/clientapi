@@ -10,7 +10,7 @@ class InvalidBearerToken(APIClientError):
 
 
 class InvalidSharedSecretKey(APIClientError):
-    code = "shared_secret_key_not_valid"
+    code = "invalid_shared_secret_key"
     detail = "The secret key is not valid"
     source = None
 
