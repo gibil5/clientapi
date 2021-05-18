@@ -30,6 +30,91 @@ The `FURY_AUTH` variable can be taken from [here](https://manage.fury.io/manage/
 
 
 &nbsp;
+## Usage
+
+#### Creating a Client
+
+The following block shows how to create a new Client with schema parsing
+
+```python3
+from enum import Enum
+from typing import Optional
+from uuid import UUID
+
+from clientapi import ClientAPI, parse
+from pydantic import BaseModel
+
+
+class Path(str, Enum):
+    EMPLOYEES = "/api/employees"
+    EMPLOYEE = "/api/employees/{employee_id}"
+
+
+class Employee(BaseModel):  # pylint: disable=too-few-public-methods
+    id: UUID
+    customer_id: UUID
+    slack_id: Optional[str]
+    email: str
+    first_name: str
+    last_name: str
+
+
+class UpdateEmployeePayload(BaseModel):  # pylint: disable=too-few-public-methods
+    first_name: str
+    last_name: str
+    email: Optional[str]
+    avatar: Optional[str]
+
+
+class CustomersAPI(ClientAPI):
+
+    def __init__(self, session, url="some default url"):
+        super().__init__(session, url)
+
+    def update_employee(self, employee_id, payload: UpdateEmployeePayload) -> Employee:
+        """Updates an Employee record in api-customers.
+
+        Args:
+            employee_id (str): Id of the Employee in the Electric platform
+            payload (EmployeeUpdatedRequest): Pydantic model that represents the body of the request.
+        """
+        url = Path.EMPLOYEE.format(employee_id=employee_id)
+        response = self.execute_request(
+            url,
+            method="PATCH",
+            data=payload.json(),
+        )
+        return parse(response, model=Employee)
+```
+
+
+#### Using the clients
+
+For using the client, you have a set of different sessions as context managers
+
+```python
+from clientapi import APIClientError, sessions
+
+from your.project.someplace import (
+    CustomersAPI,
+    UpdateEmployeePayload,
+    API_CUSTOMERS_SHARED_SECRET,
+)
+
+with sessions.shared_secret(secret_key=API_CUSTOMERS_SHARED_SECRET) as session:
+    api = CustomersAPI(session)
+
+    try:
+        payload = UpdateEmployeePayload(...)
+        api.update_employee(employee_id="some_id", payload=payload)
+    except APIClientError as err:
+        # something to do with err
+        pass
+```
+
+> You can check the exception hierarchy [here](clientapi/exceptions.py)
+
+&nbsp;
 ## Development
 
 
