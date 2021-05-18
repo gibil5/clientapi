@@ -20,6 +20,26 @@ def _create_headers(headers, data, content_type):
 
 class ClientAPI:  # pylint: disable=too-few-public-methods
     """Base class to define thin clients to Electric owned APIs.
+
+    Usage:
+    >>> from clientapi import ClientAPI, parse
+    >>>
+    >>> class YourAPI(ClientAPI):
+    >>>
+    >>>     # This is totally optional
+    >>>     def __init__(self, session, url="some default url"):
+    >>>         super().__init__(session, url)
+    >>>
+    >>>
+    >>>    def update_something(self, thing_id, payload: PayloadPydanticModel) -> SomethingPydanticModel:
+    >>>         path = f"/something/{thing_id}"
+    >>>         response = self.execute_request(
+    >>>             path,
+    >>>             method="PATCH",
+    >>>             data=payload.json(),
+    >>>         )
+    >>>         return parse(response, model=SomethingPydanticModel)
+
     """
 
     def __init__(self, session, url):
