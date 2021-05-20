@@ -114,6 +114,46 @@ with sessions.shared_secret(secret_key=API_CUSTOMERS_SHARED_SECRET) as session:
 
 > You can check the exception hierarchy [here](clientapi/exceptions.py)
 
+#### Testing the clients
+
+One way to test the clients is to take advantage of the `responses` library and also
+the `clientapi.mocks` module
+
+```python3
+import json
+
+import responses
+from requests import Session
+
+from clientapi import ClientAPI
+from clientapi.mocks import http_200_callback
+
+
+@responses.activate
+def test_execute_success():
+    # Given
+    url = "https://url.com"
+    resource = "/hello"
+    body = {"attribute": 1234}
+
+    responses.add_callback(
+        url=f"{url}{resource}",
+        method="GET",
+        callback=http_200_callback(body=body),
+    )
+
+    session = Session()
+
+    # When
+    api = ClientAPI(url=url, session=session)
+    response = api.execute_request(resource=resource)
+
+    # Then
+    assert json.loads(response.content) == body
+
+```
+
+
 &nbsp;
 ## Development
 

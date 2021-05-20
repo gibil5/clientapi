@@ -10,7 +10,7 @@ from clientapi.mocks import http_200_callback, http_404_callback
 
 
 # ClientAPI Scenarios
-# Scenario 01: Execute Success with Schema
+# Scenario 01: Execute Success
 # Scenario 02: Execute HTTP Error
 @responses.activate
 def test_execute_success():
