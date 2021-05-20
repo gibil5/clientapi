@@ -1,6 +1,11 @@
 import functools
 import json
+import re
 from http import HTTPStatus
+
+
+def _strip_xml(xml):
+    return re.sub(r"\s+", "", xml)
 
 
 def _transform(body, headers):
@@ -21,8 +26,12 @@ def _transform(body, headers):
 def _get_request_body(request):
     content_type = request.headers["Content-Type"]
     if content_type == "application/json":
-        return json.loads(request.body)
-    return request.body
+        body = json.loads(request.body)
+    elif content_type == "text/xml":
+        body = _strip_xml(request.body)
+    else:
+        body = request.body
+    return body
 
 
 # pylint: disable=too-many-arguments

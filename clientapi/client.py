@@ -7,6 +7,7 @@ from clientapi.exceptions import APIHTTPError
 
 class ContentType(str, Enum):
     JSON = "application/json"
+    XML = "text/xml"
 
 
 def _create_headers(headers, data, content_type):
@@ -19,7 +20,7 @@ def _create_headers(headers, data, content_type):
 
 
 class ClientAPI:  # pylint: disable=too-few-public-methods
-    """Base class to define thin clients to Electric owned APIs.
+    """Base class to define thin clients to API Clients.
 
     Usage:
     >>> from clientapi import ClientAPI, parse
@@ -43,7 +44,7 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, session, url):
-        """Instantiates a thin client to communicate with an Electric owned API.
+        """Instantiates a thin client to communicate with an API.
 
         Args:
             session (requests.Session): A initialized session instance.
@@ -72,7 +73,7 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
             data (Any, optional): Payload to send in the body. Defaults to None.
             content_type (ContentType, optional): Content-type of data. Only used if data is present. Defaults to JSON.
         Raises:
-            ElectricError: Error that occurred during the execution of the request if HTTPError takes place.
+            APIHTTPError: Error that occurred during the execution of the request if HTTPError takes place.
 
         Returns:
             Response: Model for the HTTP response in requests

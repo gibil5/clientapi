@@ -1,12 +1,12 @@
 # clientapi
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://img.shields.io/badge/version-0.1.0-blue)
+[![Version](https://img.shields.io/badge/version-0.1.1-blue)](https://img.shields.io/badge/version-0.1.1-blue)
 [![CircleCI](https://circleci.com/gh/ElectricAI/clientapi.svg?style=svg&circle-token=116bb1eeb17c6c4313e6789f3602159fe3f01b39)](https://circleci.com/gh/ElectricAI/clientapi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/maintainability)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/test_coverage)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/test_coverage)
 [![Team](https://img.shields.io/badge/team-ite-orange)](https://img.shields.io/badge/team-ite-orange)
 
-Library to provide a opinionated implementation for building REST API clients
+Library to provide an opinionated implementation for building REST API clients
 
 &nbsp;
 ## Installation
@@ -14,7 +14,7 @@ Library to provide a opinionated implementation for building REST API clients
 
 Add this to your python requirements:
 
-    clientapi==0.1.0
+    clientapi==0.1.1
 
 
 This package is stored in Gemfury. You'll need to add the gemfury index to
@@ -88,7 +88,7 @@ class CustomersAPI(ClientAPI):
 ```
 
 
-#### Using the clients
+#### Using the client
 
 For using the client, you have a set of different sessions as context managers
 
@@ -113,6 +113,46 @@ with sessions.shared_secret(secret_key=API_CUSTOMERS_SHARED_SECRET) as session:
 ```
 
 > You can check the exception hierarchy [here](clientapi/exceptions.py)
+
+#### Testing the client
+
+One way to test the clients is to take advantage of the `responses` library and also
+the `clientapi.mocks` module
+
+```python3
+import json
+
+import responses
+from requests import Session
+
+from clientapi import ClientAPI
+from clientapi.mocks import http_200_callback
+
+
+@responses.activate
+def test_execute_success():
+    # Given
+    url = "https://url.com"
+    resource = "/hello"
+    body = {"attribute": 1234}
+
+    responses.add_callback(
+        url=f"{url}{resource}",
+        method="GET",
+        callback=http_200_callback(body=body),
+    )
+
+    session = Session()
+
+    # When
+    api = ClientAPI(url=url, session=session)
+    response = api.execute_request(resource=resource)
+
+    # Then
+    assert json.loads(response.content) == body
+
+```
+
 
 &nbsp;
 ## Development
