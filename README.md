@@ -6,7 +6,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/test_coverage)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/test_coverage)
 [![Team](https://img.shields.io/badge/team-ite-orange)](https://img.shields.io/badge/team-ite-orange)
 
-Library to provide a opinionated implementation for building REST API clients
+Library to provide an opinionated implementation for building REST API clients
 
 &nbsp;
 ## Installation
@@ -88,7 +88,7 @@ class CustomersAPI(ClientAPI):
 ```
 
 
-#### Using the clients
+#### Using the client
 
 For using the client, you have a set of different sessions as context managers
 
@@ -114,7 +114,7 @@ with sessions.shared_secret(secret_key=API_CUSTOMERS_SHARED_SECRET) as session:
 
 > You can check the exception hierarchy [here](clientapi/exceptions.py)
 
-#### Testing the clients
+#### Testing the client
 
 One way to test the clients is to take advantage of the `responses` library and also
 the `clientapi.mocks` module
