@@ -6,7 +6,7 @@ import responses
 from requests import Session
 
 from clientapi import APIHTTPError, ClientAPI
-from tests.mocks.response import http_200_callback, http_404_callback
+from clientapi.mocks import http_200_callback, http_404_callback
 
 
 # ClientAPI Scenarios
