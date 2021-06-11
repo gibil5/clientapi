@@ -60,6 +60,7 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
         params=None,
         headers=None,
         data=None,
+        timeout=None,
         content_type: ContentType = ContentType.JSON,
     ) -> Response:  # pylint: disable=too-many-arguments
         """Low-level function for API calls.
@@ -86,6 +87,7 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
                 params=params,
                 headers=_create_headers(headers, data, content_type),
                 data=data,
+                timeout=timeout,
             )
             response.raise_for_status()
             return response
