@@ -31,6 +31,7 @@ def test_api_client_error_content():
     assert content["code"] == code
     assert content["detail"] == detail
     assert content["source"] == source
+    assert str(err) == f"({code}) {detail}. Source: {str(source)}"
 
 
 # APIHTTPError Scenarios
