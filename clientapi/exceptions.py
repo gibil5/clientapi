@@ -22,7 +22,7 @@ class APIClientError(Exception):
         if source:
             self.source = source
 
-        message = f"({self.code}) {self.detail}."
+        message = f"({self.code}) {self.detail}. "
 
         if source:
             message += f"Source: {str(source)}"
