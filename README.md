@@ -1,6 +1,6 @@
 # clientapi
 
-[![Version](https://img.shields.io/badge/version-0.1.1-blue)](https://img.shields.io/badge/version-0.1.1-blue)
+[![Version](https://img.shields.io/badge/version-0.1.2-blue)](https://img.shields.io/badge/version-0.1.2-blue)
 [![CircleCI](https://circleci.com/gh/ElectricAI/clientapi.svg?style=svg&circle-token=116bb1eeb17c6c4313e6789f3602159fe3f01b39)](https://circleci.com/gh/ElectricAI/clientapi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/maintainability)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/test_coverage)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/test_coverage)
@@ -14,7 +14,7 @@ Library to provide an opinionated implementation for building REST API clients
 
 Add this to your python requirements:
 
-    clientapi==0.1.1
+    clientapi==0.1.2
 
 
 This package is stored in Gemfury. You'll need to add the gemfury index to
