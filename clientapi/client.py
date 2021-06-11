@@ -72,6 +72,7 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
             params (Dict[str, str], optional): Query parameters to include in the URL. Defaults to None.
             headers (Dict[str, str], optional): HTTP method to execute. Defaults to None.
             data (Any, optional): Payload to send in the body. Defaults to None.
+            timeout (int, optional): Amount of seconds to wait for a timeout and raise an exception
             content_type (ContentType, optional): Content-type of data. Only used if data is present. Defaults to JSON.
         Raises:
             APIHTTPError: Error that occurred during the execution of the request if HTTPError takes place.
