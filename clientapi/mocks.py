@@ -54,7 +54,7 @@ def _http_callback(status_code, headers=None, body=None, request_body=None, requ
 
         # Assert that the request params are the expected ones
         for param_name, param_expected_value in request_params.items():
-            assert request.get(param_name) == param_expected_value
+            assert request.params.get(param_name) == param_expected_value
 
         return status_code, headers, body
 
