@@ -1,7 +1,7 @@
 from base64 import b64encode
 
 from requests import Session
-from requests.auth import HTTPBasicAuth
+from requests.auth import AuthBase, HTTPBasicAuth
 
 from clientapi import sessions
 from clientapi.auth import Bearer, SharedSecret
@@ -65,6 +65,17 @@ def test_sessions_basic():
 
         expected_basic_token = _get_expected_basic_token(username, password)
         assert dummy_request.headers["Authorization"] == f"Basic {expected_basic_token}"
+
+
+def test_sessions_base():
+    # Given
+    auth_base = AuthBase()
+
+    # When
+    with sessions.base(auth_base) as s:
+        # Then
+        assert isinstance(s, Session)
+        assert isinstance(s.auth, AuthBase)
 
 
 def _get_expected_basic_token(username, password):

@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 
 from requests import Session
-from requests.auth import HTTPBasicAuth
+from requests.auth import AuthBase, HTTPBasicAuth
 
 from clientapi.auth import Bearer, SharedSecret
 
@@ -64,5 +64,21 @@ def basic(username, password):
     """
     session = Session()
     session.auth = HTTPBasicAuth(username, password)
+    yield session
+    session.close()
+
+
+@contextmanager
+def base(base_auth: AuthBase):
+    """
+    Creates a HTTP session using a AuthBase object
+    Args:
+        base_auth (AuthBase): AuthBase
+
+    Returns:
+        Session
+    """
+    session = Session()
+    session.auth = base_auth
     yield session
     session.close()
