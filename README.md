@@ -1,6 +1,6 @@
 # clientapi
 
-[![Version](https://img.shields.io/badge/version-0.2.0-blue)](https://img.shields.io/badge/version-0.2.0-blue)
+[![Version](https://img.shields.io/badge/version-0.3.0-blue)](https://img.shields.io/badge/version-0.3.0-blue)
 [![CircleCI](https://circleci.com/gh/ElectricAI/clientapi.svg?style=svg&circle-token=116bb1eeb17c6c4313e6789f3602159fe3f01b39)](https://circleci.com/gh/ElectricAI/clientapi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/maintainability)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/808f871258566a76cfe0/test_coverage)](https://codeclimate.com/repos/606c928b15a5f61085017d7c/test_coverage)
@@ -14,7 +14,7 @@ Library to provide an opinionated implementation for building REST API clients
 
 Add this to your python requirements:
 
-    clientapi==0.2.0
+    clientapi==0.3.0
 
 
 This package is stored in Gemfury. You'll need to add the gemfury index to
@@ -68,8 +68,8 @@ class UpdateEmployeePayload(BaseModel):  # pylint: disable=too-few-public-method
 
 class CustomersAPI(ClientAPI):
 
-    def __init__(self, session, url="some default url"):
-        super().__init__(session, url)
+    def __init__(self, session, url="some default url", logger=None):
+        super().__init__(session, url, logger)
 
     def update_employee(self, employee_id, payload: UpdateEmployeePayload) -> Employee:
         """Updates an Employee record in api-customers.
@@ -113,6 +113,43 @@ with sessions.shared_secret(secret_key=API_CUSTOMERS_SHARED_SECRET) as session:
 ```
 
 > You can check the exception hierarchy [here](clientapi/exceptions.py)
+
+#### Logging
+
+A default logger (`clientapi`) is created by default in DEBUG mode. You can configure its log level
+with the following lines:
+
+```python3
+import logging
+from logging import INFO
+
+logger = logging.getLogger("clientapi")
+logger.setLevel(INFO)
+```
+
+You can also use a custom logger while instantiating the client
+
+```python3
+
+import logging
+from logging import INFO
+
+from clientapi import sessions
+
+from your.project.someplace import (
+    CustomersAPI,
+    API_CUSTOMERS_SHARED_SECRET,
+)
+
+custom_logger = logging.getLogger("mycustomlogger")
+custom_logger.setLevel(INFO)
+
+with sessions.shared_secret(secret_key=API_CUSTOMERS_SHARED_SECRET) as session:
+    api = CustomersAPI(session, logger=custom_logger)
+    ...
+```
+
+
 
 #### Testing the client
 

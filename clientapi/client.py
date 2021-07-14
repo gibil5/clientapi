@@ -1,8 +1,12 @@
+import json
+import time
 from enum import Enum
 
+import requests
 from requests import HTTPError, Response
 
 from clientapi.exceptions import APIHTTPError
+from clientapi.logger import clientapi_logger
 
 
 class ContentType(str, Enum):
@@ -43,15 +47,17 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(self, session, url):
+    def __init__(self, session, url, logger=None):
         """Instantiates a thin client to communicate with an API.
 
         Args:
             session (requests.Session): A initialized session instance.
-            url (str): Base URL of the API
+            url (str): Base URL of the API.
+            logger (Logger): Logger to use for debugging purposes. Defaults to lib logger
         """
         self._session = session
         self._url = url
+        self._logger = logger or clientapi_logger
 
     def execute_request(
         self,
@@ -82,15 +88,57 @@ class ClientAPI:  # pylint: disable=too-few-public-methods
         """
         url = f"{self._url}{resource}"
         try:
+            headers = _create_headers(headers, data, content_type)
+
+            self._logger.debug(f"Request: %s", _get_request_log_detail(url, method, headers, data, params))
+            start = time.time()
             response = self._session.request(
                 url=url,
                 method=method,
                 params=params,
-                headers=_create_headers(headers, data, content_type),
+                headers=headers,
                 data=data,
                 timeout=timeout,
             )
+            end = time.time()
+            self._logger.debug(f"Response: %s", _get_response_log_detail(response, start, end))
             response.raise_for_status()
             return response
         except HTTPError as err:
             raise APIHTTPError.wrap(err) from err
+
+
+def _get_request_log_detail(url, method, headers, data, params):
+    log_fields = {
+        "url": url,
+        "method": method,
+    }
+
+    if headers:
+        log_fields["headers"] = headers
+    if data:
+        log_fields["data"] = data
+    if params:
+        log_fields["params"] = params
+
+    return json.dumps(log_fields)
+
+
+def _get_response_log_detail(response: requests.Response, start, end):
+    log_fields = {
+        "status_code": response.status_code,
+        "time_ms": _get_elapsed_time_ms(start, end),
+    }
+
+    if response.text:
+        log_fields["body"] = response.text
+    if response.headers:
+        log_fields["headers"] = dict(response.headers)
+
+    return json.dumps(log_fields)
+
+
+def _get_elapsed_time_ms(start, end):
+    elapsed_seconds = end - start
+    elapsed_ms = elapsed_seconds * 1000
+    return round(elapsed_ms, 2)
