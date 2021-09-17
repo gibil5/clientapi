@@ -1,6 +1,7 @@
 import json
 import time
 from enum import Enum
+from uuid import UUID
 
 import requests
 from requests import HTTPError, Response
@@ -121,7 +122,7 @@ def _get_request_log_detail(url, method, headers, data, params):
     if params:
         log_fields["params"] = params
 
-    return json.dumps(log_fields)
+    return json.dumps(log_fields, cls=LogEncoder)
 
 
 def _get_response_log_detail(response: requests.Response, start, end):
@@ -142,3 +143,18 @@ def _get_elapsed_time_ms(start, end):
     elapsed_seconds = end - start
     elapsed_ms = elapsed_seconds * 1000
     return round(elapsed_ms, 2)
+
+
+class LogEncoder(json.JSONEncoder):
+    # pylint: disable=method-hidden
+    """
+    Reason to disable:
+    Pylint freaks out because JSONEncoder also has a property named
+    as the method but the latter is mangled at runtime.
+    Reference: https://github.com/PyCQA/pylint/issues/414
+    """
+
+    def default(self, o):
+        if isinstance(o, UUID):
+            return str(o)
+        return json.JSONEncoder.default(self, o)

@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+import uuid
 from http import HTTPStatus
 from logging import DEBUG, INFO
 
@@ -54,8 +55,10 @@ def test_execute_success_with_default_logger_enabled(caplog):
     resource = "/hello"
     body = {"attribute": 1234}
     request_body = {"attr": "abc"}
-    request_params = {"page": "1"}
+    request_uuid = uuid.uuid4()
+    request_params = {"page": "1", "my_uuid_field": request_uuid}
 
+    expected_params = {"page": "1", "my_uuid_field": str(request_uuid)}
     url = f"{base_url}{resource}"
     responses.add_callback(
         url=url,
@@ -63,7 +66,7 @@ def test_execute_success_with_default_logger_enabled(caplog):
         callback=http_200_callback(
             body=body,
             request_body=request_body,
-            request_params=request_params,
+            request_params=expected_params,
         ),
     )
 
@@ -98,7 +101,7 @@ def test_execute_success_with_default_logger_enabled(caplog):
     assert request_log_detail["method"] == method
     assert request_log_detail["headers"] == {"Content-Type": "application/json"}
     assert request_log_detail["data"] == json.dumps(request_body)
-    assert request_log_detail["params"] == request_params
+    assert request_log_detail["params"] == expected_params
 
     # Assert response log
     response_log = caplog.records[1]
