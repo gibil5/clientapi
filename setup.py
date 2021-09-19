@@ -1,6 +1,7 @@
 import setuptools
 
-__version__ = open("clientapi/.version").read()
+#__version__ = open("clientapi/.version").read()
+__version__ = '0.1.2'
 
 with open("README.md") as f:
     long_description = f.read()
